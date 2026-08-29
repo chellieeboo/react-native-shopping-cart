@@ -2,11 +2,12 @@ import { Button, FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { useCart } from "../app/context/CartContext";
 
 export default function CartScreen() {
-  const { cart, removeFromCart } = useCart();
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const { cart, removeFromCart, increaseQuantity, decreaseQuantity } =
+    useCart();
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    // 👈 Inayos ang Container para nakagitna at mobile size lang sa browser
     <View style={styles.container}>
       <FlatList
         data={cart}
@@ -17,14 +18,24 @@ export default function CartScreen() {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Image source={item.image} style={styles.image} />
-            <View style={{ flex: 1, justifyContent: "center" }}>
+            <View style={{ flex: 1, maxWidth: 300 }}>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>₱{item.price}</Text>
-              <View style={{ width: 100 }}>
+              <Text style={styles.price}>₱{item.price} each</Text>
+
+              <View style={styles.qtyRow}>
+                <Button title="−" onPress={() => decreaseQuantity(item.id)} />
+                <Text style={styles.qtyText}>{item.quantity}</Text>
+                <Button title="+" onPress={() => increaseQuantity(item.id)} />
+              </View>
+
+              <Text style={styles.subtotal}>
+                Subtotal: ₱{item.price * item.quantity}
+              </Text>
+
+              <View style={styles.removeButton}>
                 <Button
                   title="Remove"
                   onPress={() => removeFromCart(item.id)}
-                  color="#ff3b30"
                 />
               </View>
             </View>
@@ -39,47 +50,66 @@ export default function CartScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
-    maxWidth: 500, // 👈 Ginawang Phone layout width
     width: "100%",
+    maxWidth: 600,
     alignSelf: "center",
+    padding: 15,
     backgroundColor: "#f5f5f5",
   },
   card: {
     flexDirection: "row",
+    width: "100%",
     marginBottom: 15,
-    backgroundColor: "#fff",
+    backgroundColor: "#D7CCC8",
     padding: 12,
-    borderRadius: 12,
-    elevation: 2,
-    alignItems: "center",
+    borderRadius: 10,
+    elevation: 3,
   },
   image: {
-    width: 80,
-    height: 80,
-    resizeMode: "cover",
-    borderRadius: 8,
-    marginRight: 15,
+    width: 90,
+    height: 90,
+    resizeMode: "contain",
+    marginRight: 10,
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#D6A85F",
   },
   price: {
-    fontSize: 15,
-    color: "#0A84FF",
+    fontSize: 16,
+    color: "#2B2118",
     marginBottom: 8,
   },
+  qtyRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  qtyText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginHorizontal: 12,
+  },
+  subtotal: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#2B2118",
+    marginBottom: 8,
+  },
+  removeButton: {
+    alignSelf: "flex-start",
+    width: 120,
+  },
   total: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    marginVertical: 15,
+    marginTop: 20,
   },
   empty: {
     textAlign: "center",
     marginTop: 50,
     fontSize: 18,
-    color: "#8e8e93",
   },
 });

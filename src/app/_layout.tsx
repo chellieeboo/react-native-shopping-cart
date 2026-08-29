@@ -5,7 +5,7 @@ export default function RootLayout() {
     <CartProvider>
       <Stack
         screenOptions={{
-          headerTitle: "TechPoint",
+          headerTitle: "Rochordz",
           headerTitleAlign: "center",
         }}
       />

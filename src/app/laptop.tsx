@@ -1,11 +1,11 @@
 import { FlatList, View } from "react-native";
-import { useCart } from "../app/context/CartContext";
 import Header from "../components/header";
 import ProductCard from "../components/productcard";
 import { products } from "../data/product";
+import { useCart } from "./context/CartContext";
 
-export default function HomeScreen() {
-  const { cart, cartCount, addToCart } = useCart();
+export default function LaptopScreen() {
+  const { cart, addToCart } = useCart();
 
   return (
     <View
@@ -17,7 +17,8 @@ export default function HomeScreen() {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <Header cartCount={cartCount} />
+      <Header cartCount={cart.length} />
+
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
