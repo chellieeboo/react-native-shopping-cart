@@ -2,10 +2,37 @@ import { Button, FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { useCart } from "../app/context/CartContext";
 
 export default function CartScreen() {
-  const { cart, removeFromCart, increaseQuantity, decreaseQuantity } =
-    useCart();
+  const {
+    cart,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+    clearCart,
+  } = useCart();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleCheckout = () => {
+    if (cart.length === 0) {
+      if (typeof window !== "undefined") {
+        window.alert("Your cart is empty. Add items before checking out.");
+      }
+      return;
+    }
+
+    if (typeof window !== "undefined") {
+      const confirmed = window.confirm(
+        `Confirm your order of ${cart.length} item(s) totaling ₱${total}?`,
+      );
+
+      if (confirmed) {
+        window.alert(
+          "Thank you for shopping with Rochordz! Your order has been placed.",
+        );
+        clearCart();
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -43,6 +70,10 @@ export default function CartScreen() {
         )}
       />
       <Text style={styles.total}>Total: ₱{total}</Text>
+
+      <View style={styles.checkoutButton}>
+        <Button title="CHECKOUT" onPress={handleCheckout} color="#2196F3" />
+      </View>
     </View>
   );
 }
@@ -106,6 +137,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 20,
+  },
+  checkoutButton: {
+    marginTop: 15,
+    marginBottom: 20,
   },
   empty: {
     textAlign: "center",
