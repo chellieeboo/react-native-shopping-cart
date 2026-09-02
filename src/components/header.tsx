@@ -12,95 +12,135 @@ export default function Header({ cartCount }: HeaderProps) {
     <View
       style={{
         backgroundColor: "#4A2C20",
-        padding: 12,
+        paddingTop: 20,
+        paddingBottom: 16,
+        paddingHorizontal: 16,
         alignItems: "center",
       }}
     >
-      <Text style={{ color: "#F5EBDD", fontWeight: "bold", fontSize: 22 }}>
+      <Text
+        style={{
+          color: "#F5EBDD",
+          fontWeight: "700",
+          fontSize: 26,
+          letterSpacing: 1,
+        }}
+      >
         Rochordz
       </Text>
-      <Text style={{ color: "#D6A85F", fontSize: 12, marginTop: 2 }}>
+      <Text
+        style={{
+          color: "#D6A85F",
+          fontSize: 12,
+          marginTop: 2,
+          fontStyle: "italic",
+          letterSpacing: 0.5,
+        }}
+      >
         Your Music House
       </Text>
-      <Text style={{ color: "#F5EBDD", marginTop: 6 }}>Cart: {cartCount}</Text>
+
+      <View
+        style={{
+          width: 40,
+          height: 1,
+          backgroundColor: "#D6A85F",
+          marginTop: 10,
+          marginBottom: 10,
+          opacity: 0.6,
+        }}
+      />
+
+      <Text style={{ color: "#F5EBDD", fontSize: 13 }}>Cart: {cartCount}</Text>
+
       <TouchableOpacity
         onPress={() => router.push("/cart")}
         style={{
           backgroundColor: "#D6A85F",
-          paddingVertical: 6,
-          paddingHorizontal: 16,
-          borderRadius: 4,
-          marginTop: 6,
+          paddingVertical: 8,
+          paddingHorizontal: 22,
+          borderRadius: 25,
+          marginTop: 10,
         }}
       >
-        <Text style={{ color: "#4A2C20", fontWeight: "bold" }}>VIEW CART</Text>
+        <Text style={{ color: "#4A2C20", fontWeight: "700", fontSize: 13 }}>
+          View Cart
+        </Text>
       </TouchableOpacity>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{ marginTop: 10, width: "100%" }}
-        contentContainerStyle={{ paddingHorizontal: 8, gap: 8 }}
+        style={{ marginTop: 16, width: "100%" }}
+        contentContainerStyle={{ paddingHorizontal: 8, gap: 10 }}
       >
         <TouchableOpacity
           onPress={() => router.push("/")}
           style={{
             backgroundColor: "#2B1810",
-            paddingVertical: 6,
-            paddingHorizontal: 14,
-            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 18,
+            borderRadius: 20,
           }}
         >
-          <Text style={{ color: "#F5EBDD", fontWeight: "bold" }}>ALL</Text>
+          <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
+            All
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/guitar")}
           style={{
             backgroundColor: "#2B1810",
-            paddingVertical: 6,
-            paddingHorizontal: 14,
-            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 18,
+            borderRadius: 20,
           }}
         >
-          <Text style={{ color: "#F5EBDD", fontWeight: "bold" }}>GUITAR</Text>
+          <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
+            Guitars
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/piano")}
           style={{
             backgroundColor: "#2B1810",
-            paddingVertical: 6,
-            paddingHorizontal: 14,
-            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 18,
+            borderRadius: 20,
           }}
         >
-          <Text style={{ color: "#F5EBDD", fontWeight: "bold" }}>PIANO</Text>
+          <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
+            Pianos
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/drums")}
           style={{
             backgroundColor: "#2B1810",
-            paddingVertical: 6,
-            paddingHorizontal: 14,
-            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 18,
+            borderRadius: 20,
           }}
         >
-          <Text style={{ color: "#F5EBDD", fontWeight: "bold" }}>DRUMS</Text>
+          <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
+            Drums
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/accessories")}
           style={{
             backgroundColor: "#2B1810",
-            paddingVertical: 6,
-            paddingHorizontal: 14,
-            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 18,
+            borderRadius: 20,
           }}
         >
-          <Text style={{ color: "#F5EBDD", fontWeight: "bold" }}>
-            ACCESSORIES
+          <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
+            Accessories
           </Text>
         </TouchableOpacity>
       </ScrollView>

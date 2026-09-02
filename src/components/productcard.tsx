@@ -1,11 +1,11 @@
-import { useState } from "react"; // 🆕 kailangan para sa modal state
+import { useState } from "react";
 import {
-  Button,
   Image,
-  Modal, // 🆕
-  Pressable, // 🆕
+  Modal,
+  Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -16,15 +16,13 @@ export default function ProductCard({
   item: any;
   onAdd: any;
 }) {
-  const [modalVisible, setModalVisible] = useState(false); // 🆕 controls kung bukas/sarado yung modal
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // 🆕 stock logic — 3 states base sa item.stock
   const isOutOfStock = item.stock === 0;
   const isLowStock = item.stock > 0 && item.stock <= 3;
 
   return (
     <View style={styles.card}>
-      {/* 🆕 Pressable wrapper sa image — pag pinindot, bubukas yung modal */}
       <Pressable onPress={() => setModalVisible(true)}>
         <Image source={item.image} style={styles.image} />
       </Pressable>
@@ -32,7 +30,6 @@ export default function ProductCard({
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.price}>₱{item.price}</Text>
 
-      {/* 🆕 Stock Indicator — nagbabago depende sa stock number */}
       {isOutOfStock ? (
         <Text style={styles.outOfStock}>Out of Stock</Text>
       ) : isLowStock ? (
@@ -41,13 +38,16 @@ export default function ProductCard({
         <Text style={styles.inStock}>In Stock</Text>
       )}
 
-      <Button
-        title="Add to Cart"
+      <TouchableOpacity
         onPress={() => onAdd(item)}
-        disabled={isOutOfStock} // 🆕 di na pwede i-click pag out of stock
-      />
+        disabled={isOutOfStock}
+        style={[styles.addButton, isOutOfStock && styles.addButtonDisabled]}
+      >
+        <Text style={styles.addButtonText}>
+          {isOutOfStock ? "Unavailable" : "Add to Cart"}
+        </Text>
+      </TouchableOpacity>
 
-      {/* 🆕 Product Detail Modal — lumalabas pag pinindot yung image */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -59,7 +59,7 @@ export default function ProductCard({
             <Image source={item.image} style={styles.modalImage} />
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.price}>₱{item.price}</Text>
-            <Text style={styles.category}>Category: {item.category}</Text>
+            <Text style={styles.category}>{item.category}</Text>
 
             {isOutOfStock ? (
               <Text style={styles.outOfStock}>Out of Stock</Text>
@@ -69,15 +69,29 @@ export default function ProductCard({
               <Text style={styles.inStock}>{item.stock} in stock</Text>
             )}
 
-            <Button
-              title="Add to Cart"
+            <TouchableOpacity
               onPress={() => {
                 onAdd(item);
-                setModalVisible(false); // isasara modal after add
+                setModalVisible(false);
               }}
               disabled={isOutOfStock}
-            />
-            <Button title="Close" onPress={() => setModalVisible(false)} />
+              style={[
+                styles.addButton,
+                isOutOfStock && styles.addButtonDisabled,
+                { marginTop: 12 },
+              ]}
+            >
+              <Text style={styles.addButtonText}>
+                {isOutOfStock ? "Unavailable" : "Add to Cart"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -88,78 +102,100 @@ export default function ProductCard({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#4A2C20",
-    padding: 15,
-    margin: 10,
-    borderRadius: 15,
+    padding: 18,
+    margin: 12,
+    borderRadius: 20,
     alignItems: "center",
-    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
   },
   image: {
     width: 180,
     height: 180,
     resizeMode: "cover",
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 14,
+    marginBottom: 12,
   },
   name: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: "#F5EBDD",
     marginBottom: 4,
+    textAlign: "center",
   },
   price: {
     fontSize: 16,
-    color: "#E8DED2",
+    color: "#D6A85F",
     fontWeight: "600",
-    marginBottom: 4,
-  },
-  category: {
-    // 🆕
-    fontSize: 14,
-    color: "#E8DED2",
     marginBottom: 6,
   },
-  inStock: {
-    // 🆕
-    color: "#7CFC7C",
+  category: {
     fontSize: 13,
-    marginBottom: 8,
+    color: "#E8DED2",
+    marginBottom: 6,
+    fontStyle: "italic",
+  },
+  inStock: {
+    color: "#8FD694",
+    fontSize: 13,
+    marginBottom: 10,
   },
   lowStock: {
-    // 🆕
     color: "#FFD166",
     fontWeight: "bold",
     fontSize: 13,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   outOfStock: {
-    // 🆕
-    color: "#FF6B6B",
+    color: "#FF8A80",
     fontWeight: "bold",
     fontSize: 13,
-    marginBottom: 8,
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: "#D6A85F",
+    paddingVertical: 10,
+    paddingHorizontal: 28,
+    borderRadius: 25,
+  },
+  addButtonDisabled: {
+    backgroundColor: "#7A6A5D",
+  },
+  addButtonText: {
+    color: "#2B1810",
+    fontWeight: "700",
+    fontSize: 14,
+  },
+  closeButton: {
+    marginTop: 8,
+    paddingVertical: 6,
+  },
+  closeButtonText: {
+    color: "#E8DED2",
+    fontSize: 13,
+    textDecorationLine: "underline",
   },
   modalOverlay: {
-    // 🆕
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    // 🆕
     backgroundColor: "#4A2C20",
-    padding: 25,
-    borderRadius: 15,
+    padding: 28,
+    borderRadius: 20,
     alignItems: "center",
     width: "80%",
   },
   modalImage: {
-    // 🆕
     width: 200,
     height: 200,
     resizeMode: "cover",
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 14,
+    marginBottom: 12,
   },
 });
