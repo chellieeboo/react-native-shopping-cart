@@ -31,6 +31,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const existing = prev.find((item) => item.id === product.id);
 
       if (existing) {
+        if (existing.quantity >= product.stock) {
+          if (typeof window !== "undefined") {
+            window.alert(
+              `Only ${product.stock} ${product.name} available in stock.`,
+            );
+          }
+          return prev;
+        }
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
@@ -38,12 +46,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         );
       }
 
+      if (typeof window !== "undefined") {
+        window.alert(`${product.name} has been added to your cart.`);
+      }
       return [...prev, { ...product, quantity: 1 }];
     });
-
-    if (typeof window !== "undefined") {
-      window.alert(`${product.name} has been added to your cart.`);
-    }
   };
 
   const removeFromCart = (id: string) => {
@@ -52,9 +59,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const increaseQuantity = (id: string) => {
     setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
-      ),
+      prev.map((item) => {
+        if (item.id === id) {
+          if (item.quantity >= item.stock) {
+            if (typeof window !== "undefined") {
+              window.alert(
+                `Only ${item.stock} ${item.name} available in stock.`,
+              );
+            }
+            return item;
+          }
+          return { ...item, quantity: item.quantity + 1 };
+        }
+        return item;
+      }),
     );
   };
 

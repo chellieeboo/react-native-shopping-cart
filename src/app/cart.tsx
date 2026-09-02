@@ -1,7 +1,9 @@
+import { useRouter } from "expo-router";
 import { Button, FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { useCart } from "../app/context/CartContext";
 
 export default function CartScreen() {
+  const router = useRouter();
   const {
     cart,
     removeFromCart,
@@ -74,6 +76,14 @@ export default function CartScreen() {
       <View style={styles.checkoutButton}>
         <Button title="CHECKOUT" onPress={handleCheckout} color="#2196F3" />
       </View>
+
+      <View style={styles.continueButton}>
+        <Button
+          title="Continue Shopping"
+          onPress={() => router.push("/")}
+          color="#757575"
+        />
+      </View>
     </View>
   );
 }
@@ -140,6 +150,9 @@ const styles = StyleSheet.create({
   },
   checkoutButton: {
     marginTop: 15,
+  },
+  continueButton: {
+    marginTop: 10,
     marginBottom: 20,
   },
   empty: {
