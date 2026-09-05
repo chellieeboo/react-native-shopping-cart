@@ -1,14 +1,14 @@
 import { FlatList, View } from "react-native";
 import Header from "../components/header";
 import ProductCard from "../components/productcard";
-import { products } from "../data/product";
+import { packages } from "../data/packages";
 import { useCart } from "./context/CartContext";
 
-export default function PianoScreen() {
+export default function CelebrationsScreen() {
   const { cart, cartCount, addToCart } = useCart();
 
-  const pianoProducts = products.filter(
-    (product) => product.category === "Piano",
+  const celebrationPackages = packages.filter(
+    (pkg) => pkg.mainCategory === "Celebrations",
   );
 
   return (
@@ -18,12 +18,12 @@ export default function PianoScreen() {
         width: "100%",
         maxWidth: 600,
         alignSelf: "center",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#FAF3E8",
       }}
     >
       <Header cartCount={cartCount} />
       <FlatList
-        data={pianoProducts}
+        data={celebrationPackages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCard item={item} onAdd={addToCart} />}
       />

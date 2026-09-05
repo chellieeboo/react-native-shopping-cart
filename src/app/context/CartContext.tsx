@@ -1,15 +1,13 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { Product } from "../../data/product";
+import { packages } from "../../data/packages";
 
-export type CartItem = Product & { quantity: number };
+type Package = (typeof packages)[number];
 
 type CartContextType = {
-  cart: CartItem[];
+  cart: Package[];
   cartCount: number;
-  addToCart: (product: Product) => void;
+  addToCart: (pkg: Package) => void;
   removeFromCart: (id: string) => void;
-  increaseQuantity: (id: string) => void;
-  decreaseQuantity: (id: string) => void;
   clearCart: () => void;
 };
 
@@ -18,38 +16,31 @@ const CartContext = createContext<CartContextType>({
   cartCount: 0,
   addToCart: () => {},
   removeFromCart: () => {},
-  increaseQuantity: () => {},
-  decreaseQuantity: () => {},
   clearCart: () => {},
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<Package[]>([]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (pkg: Package) => {
     setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const alreadyRequested = prev.find((item) => item.id === pkg.id);
 
-      if (existing) {
-        if (existing.quantity >= product.stock) {
-          if (typeof window !== "undefined") {
-            window.alert(
-              `Only ${product.stock} ${product.name} available in stock.`,
-            );
-          }
-          return prev;
+      if (alreadyRequested) {
+        if (typeof window !== "undefined") {
+          window.alert(
+            `You've already requested ${pkg.name}. Remove it first if you'd like to change your booking.`,
+          );
         }
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        );
+        return prev;
       }
 
       if (typeof window !== "undefined") {
-        window.alert(`${product.name} has been added to your cart.`);
+        window.alert(
+          `Your request for ${pkg.name} has been added. We'll contact you to confirm your booking.`,
+        );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, pkg];
     });
   };
 
@@ -57,40 +48,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const increaseQuantity = (id: string) => {
-    setCart((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          if (item.quantity >= item.stock) {
-            if (typeof window !== "undefined") {
-              window.alert(
-                `Only ${item.stock} ${item.name} available in stock.`,
-              );
-            }
-            return item;
-          }
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      }),
-    );
-  };
-
-  const decreaseQuantity = (id: string) => {
-    setCart((prev) =>
-      prev
-        .map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
-        )
-        .filter((item) => item.quantity > 0),
-    );
-  };
-
   const clearCart = () => {
     setCart([]);
   };
 
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = cart.length;
 
   return (
     <CartContext.Provider
@@ -99,8 +61,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cartCount,
         addToCart,
         removeFromCart,
-        increaseQuantity,
-        decreaseQuantity,
         clearCart,
       }}
     >

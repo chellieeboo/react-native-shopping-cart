@@ -2,7 +2,7 @@ import { FlatList, View } from "react-native";
 import { useCart } from "../app/context/CartContext";
 import Header from "../components/header";
 import ProductCard from "../components/productcard";
-import { products } from "../data/product";
+import { packages } from "../data/packages";
 
 export default function HomeScreen() {
   const { cart, cartCount, addToCart } = useCart();
@@ -14,12 +14,12 @@ export default function HomeScreen() {
         width: "100%",
         maxWidth: 600,
         alignSelf: "center",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#FAF3E8",
       }}
     >
       <Header cartCount={cartCount} />
       <FlatList
-        data={products}
+        data={packages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCard item={item} onAdd={addToCart} />}
       />

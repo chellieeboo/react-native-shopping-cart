@@ -11,32 +11,26 @@ import { useCart } from "../app/context/CartContext";
 
 export default function CartScreen() {
   const router = useRouter();
-  const {
-    cart,
-    removeFromCart,
-    increaseQuantity,
-    decreaseQuantity,
-    clearCart,
-  } = useCart();
+  const { cart, removeFromCart, clearCart } = useCart();
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const handleCheckout = () => {
+  const handleSubmit = () => {
     if (cart.length === 0) {
       if (typeof window !== "undefined") {
-        window.alert("Your cart is empty. Add items before checking out.");
+        window.alert("You have no booking requests yet. Pick a package first.");
       }
       return;
     }
 
     if (typeof window !== "undefined") {
       const confirmed = window.confirm(
-        `Confirm your order of ${cart.length} item(s) totaling ₱${total}?`,
+        `Submit ${cart.length} booking request(s) with an estimated total of ₱${total}? Our team will contact you to confirm dates and details.`,
       );
 
       if (confirmed) {
         window.alert(
-          "Thank you for shopping with Rochordz! Your order has been placed.",
+          "Thank you for choosing Rochordz! We'll reach out shortly to confirm your booking.",
         );
         clearCart();
       }
@@ -49,56 +43,42 @@ export default function CartScreen() {
         data={cart}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
-          <Text style={styles.empty}>Your cart is empty.</Text>
+          <Text style={styles.empty}>You have no booking requests yet.</Text>
         }
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Image source={item.image} style={styles.image} />
             <View style={{ flex: 1, maxWidth: 300 }}>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>₱{item.price} each</Text>
-
-              <View style={styles.qtyRow}>
-                <TouchableOpacity
-                  style={styles.qtyButton}
-                  onPress={() => decreaseQuantity(item.id)}
-                >
-                  <Text style={styles.qtyButtonText}>−</Text>
-                </TouchableOpacity>
-                <Text style={styles.qtyText}>{item.quantity}</Text>
-                <TouchableOpacity
-                  style={styles.qtyButton}
-                  onPress={() => increaseQuantity(item.id)}
-                >
-                  <Text style={styles.qtyButtonText}>+</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.subtotal}>
-                Subtotal: ₱{item.price * item.quantity}
+              <Text style={styles.price}>₱{item.price}</Text>
+              <Text style={styles.instruments}>
+                {item.instruments.join(" + ")}
+              </Text>
+              <Text style={styles.eventTypes}>
+                Fits: {item.eventTypes.join(", ")}
               </Text>
 
               <TouchableOpacity
                 style={styles.removeButton}
                 onPress={() => removeFromCart(item.id)}
               >
-                <Text style={styles.removeButtonText}>Remove</Text>
+                <Text style={styles.removeButtonText}>Remove request</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
       />
-      <Text style={styles.total}>Total: ₱{total}</Text>
+      <Text style={styles.total}>Estimated Total: ₱{total}</Text>
 
-      <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-        <Text style={styles.checkoutButtonText}>Checkout</Text>
+      <TouchableOpacity style={styles.checkoutButton} onPress={handleSubmit}>
+        <Text style={styles.checkoutButtonText}>Submit Booking Requests</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.continueButton}
         onPress={() => router.push("/")}
       >
-        <Text style={styles.continueButtonText}>Continue Shopping</Text>
+        <Text style={styles.continueButtonText}>Browse More Packages</Text>
       </TouchableOpacity>
     </View>
   );
@@ -141,36 +121,17 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     color: "#8A6E52",
-    marginBottom: 8,
+    marginBottom: 4,
   },
-  qtyRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  qtyButton: {
-    backgroundColor: "#4A2C20",
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  qtyButtonText: {
-    color: "#F5EBDD",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  qtyText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginHorizontal: 14,
-    color: "#2B1810",
-  },
-  subtotal: {
-    fontSize: 14,
-    fontWeight: "600",
+  instruments: {
+    fontSize: 13,
     color: "#4A2C20",
+    marginBottom: 2,
+  },
+  eventTypes: {
+    fontSize: 12,
+    color: "#8A6E52",
+    fontStyle: "italic",
     marginBottom: 8,
   },
   removeButton: {

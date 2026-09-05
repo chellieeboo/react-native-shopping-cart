@@ -37,7 +37,7 @@ export default function Header({ cartCount }: HeaderProps) {
           letterSpacing: 0.5,
         }}
       >
-        Your Music House
+        Live Music for Your Event
       </Text>
 
       <View
@@ -51,7 +51,9 @@ export default function Header({ cartCount }: HeaderProps) {
         }}
       />
 
-      <Text style={{ color: "#F5EBDD", fontSize: 13 }}>Cart: {cartCount}</Text>
+      <Text style={{ color: "#F5EBDD", fontSize: 13 }}>
+        Bookings: {cartCount}
+      </Text>
 
       <TouchableOpacity
         onPress={() => router.push("/cart")}
@@ -64,7 +66,7 @@ export default function Header({ cartCount }: HeaderProps) {
         }}
       >
         <Text style={{ color: "#4A2C20", fontWeight: "700", fontSize: 13 }}>
-          View Cart
+          View Bookings
         </Text>
       </TouchableOpacity>
 
@@ -89,7 +91,7 @@ export default function Header({ cartCount }: HeaderProps) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("/guitar")}
+          onPress={() => router.push("/wedding")}
           style={{
             backgroundColor: "#2B1810",
             paddingVertical: 8,
@@ -98,12 +100,12 @@ export default function Header({ cartCount }: HeaderProps) {
           }}
         >
           <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
-            Guitars
+            Wedding
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("/piano")}
+          onPress={() => router.push("/celebrations")}
           style={{
             backgroundColor: "#2B1810",
             paddingVertical: 8,
@@ -112,12 +114,12 @@ export default function Header({ cartCount }: HeaderProps) {
           }}
         >
           <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
-            Pianos
+            Celebrations
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("/drums")}
+          onPress={() => router.push("/memorial")}
           style={{
             backgroundColor: "#2B1810",
             paddingVertical: 8,
@@ -126,21 +128,7 @@ export default function Header({ cartCount }: HeaderProps) {
           }}
         >
           <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
-            Drums
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => router.push("/accessories")}
-          style={{
-            backgroundColor: "#2B1810",
-            paddingVertical: 8,
-            paddingHorizontal: 18,
-            borderRadius: 20,
-          }}
-        >
-          <Text style={{ color: "#F5EBDD", fontWeight: "600", fontSize: 13 }}>
-            Accessories
+            Memorial
           </Text>
         </TouchableOpacity>
       </ScrollView>
