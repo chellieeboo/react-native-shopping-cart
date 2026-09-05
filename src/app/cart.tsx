@@ -54,9 +54,19 @@ export default function CartScreen() {
               <Text style={styles.instruments}>
                 {item.instruments.join(" + ")}
               </Text>
-              <Text style={styles.eventTypes}>
-                Fits: {item.eventTypes.join(", ")}
-              </Text>
+
+              <View style={styles.bookingBox}>
+                <Text style={styles.bookingLabel}>Requested by:</Text>
+                <Text style={styles.bookingValue}>{item.booking.name}</Text>
+
+                <Text style={styles.bookingLabel}>Contact:</Text>
+                <Text style={styles.bookingValue}>{item.booking.contact}</Text>
+
+                <Text style={styles.bookingLabel}>Event date:</Text>
+                <Text style={styles.bookingValue}>
+                  {item.booking.eventDate}
+                </Text>
+              </View>
 
               <TouchableOpacity
                 style={styles.removeButton}
@@ -126,13 +136,23 @@ const styles = StyleSheet.create({
   instruments: {
     fontSize: 13,
     color: "#4A2C20",
-    marginBottom: 2,
-  },
-  eventTypes: {
-    fontSize: 12,
-    color: "#8A6E52",
-    fontStyle: "italic",
     marginBottom: 8,
+  },
+  bookingBox: {
+    backgroundColor: "#EFE2CE",
+    borderRadius: 10,
+    padding: 8,
+    marginBottom: 8,
+  },
+  bookingLabel: {
+    fontSize: 11,
+    color: "#8A6E52",
+  },
+  bookingValue: {
+    fontSize: 13,
+    color: "#2B1810",
+    fontWeight: "600",
+    marginBottom: 4,
   },
   removeButton: {
     alignSelf: "flex-start",

@@ -5,6 +5,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -17,6 +18,33 @@ export default function ProductCard({
   onAdd: any;
 }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = () => {
+    if (name.trim() === "") {
+      setError("Please enter your name.");
+      return;
+    }
+    if (contact.trim() === "") {
+      setError("Please enter your contact number.");
+      return;
+    }
+    if (eventDate.trim() === "") {
+      setError("Please enter your preferred event date.");
+      return;
+    }
+
+    setError("");
+    onAdd(item, { name, contact, eventDate });
+
+    setName("");
+    setContact("");
+    setEventDate("");
+    setModalVisible(false);
+  };
 
   return (
     <View style={styles.card}>
@@ -29,7 +57,10 @@ export default function ProductCard({
       <Text style={styles.instruments}>{item.instruments.join(" + ")}</Text>
       <Text style={styles.eventTypes}>Fits: {item.eventTypes.join(", ")}</Text>
 
-      <TouchableOpacity style={styles.addButton} onPress={() => onAdd(item)}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Text style={styles.addButtonText}>Book This Package</Text>
       </TouchableOpacity>
 
@@ -52,14 +83,36 @@ export default function ProductCard({
               Best for: {item.eventTypes.join(", ")}
             </Text>
 
+            <TextInput
+              placeholder="Your name"
+              placeholderTextColor="#B8A896"
+              value={name}
+              onChangeText={setName}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Contact number"
+              placeholderTextColor="#B8A896"
+              value={contact}
+              onChangeText={setContact}
+              style={styles.input}
+              keyboardType="phone-pad"
+            />
+            <TextInput
+              placeholder="Preferred event date (MM/DD/YYYY)"
+              placeholderTextColor="#B8A896"
+              value={eventDate}
+              onChangeText={setEventDate}
+              style={styles.input}
+            />
+
+            {error !== "" && <Text style={styles.errorText}>{error}</Text>}
+
             <TouchableOpacity
               style={[styles.addButton, { marginTop: 12 }]}
-              onPress={() => {
-                onAdd(item);
-                setModalVisible(false);
-              }}
+              onPress={handleSubmit}
             >
-              <Text style={styles.addButtonText}>Book This Package</Text>
+              <Text style={styles.addButtonText}>Submit Booking Request</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -165,5 +218,21 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 14,
     marginBottom: 12,
+  },
+  input: {
+    width: "100%",
+    backgroundColor: "#F5EBDD",
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+    color: "#2B1810",
+    fontSize: 14,
+  },
+  errorText: {
+    color: "#FF8A80",
+    fontSize: 12,
+    marginBottom: 8,
+    textAlign: "center",
   },
 });

@@ -3,10 +3,18 @@ import { packages } from "../../data/packages";
 
 type Package = (typeof packages)[number];
 
+export type BookingInfo = {
+  name: string;
+  contact: string;
+  eventDate: string;
+};
+
+export type BookingRequest = Package & { booking: BookingInfo };
+
 type CartContextType = {
-  cart: Package[];
+  cart: BookingRequest[];
   cartCount: number;
-  addToCart: (pkg: Package) => void;
+  addToCart: (pkg: Package, booking: BookingInfo) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
 };
@@ -20,9 +28,9 @@ const CartContext = createContext<CartContextType>({
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Package[]>([]);
+  const [cart, setCart] = useState<BookingRequest[]>([]);
 
-  const addToCart = (pkg: Package) => {
+  const addToCart = (pkg: Package, booking: BookingInfo) => {
     setCart((prev) => {
       const alreadyRequested = prev.find((item) => item.id === pkg.id);
 
@@ -40,7 +48,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           `Your request for ${pkg.name} has been added. We'll contact you to confirm your booking.`,
         );
       }
-      return [...prev, pkg];
+      return [...prev, { ...pkg, booking }];
     });
   };
 
