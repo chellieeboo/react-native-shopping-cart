@@ -1,5 +1,7 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -8,10 +10,13 @@ import {
   View,
 } from "react-native";
 import { useCart } from "../app/context/CartContext";
+import { useTheme } from "../app/context/ThemeContext";
 
 export default function CartScreen() {
   const router = useRouter();
   const { cart, removeFromCart, clearCart } = useCart();
+  const { colors } = useTheme();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
@@ -29,41 +34,73 @@ export default function CartScreen() {
       );
 
       if (confirmed) {
-        window.alert(
-          "Thank you for choosing Rochordz! We'll reach out shortly to confirm your booking.",
-        );
-        clearCart();
+        setIsSubmitting(true);
+
+        setTimeout(() => {
+          setIsSubmitting(false);
+          window.alert(
+            "Thank you for choosing Rochordz! We'll reach out shortly to confirm your booking.",
+          );
+          clearCart();
+        }, 1500);
       }
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FlatList
         data={cart}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={
-          <Text style={styles.empty}>You have no booking requests yet.</Text>
+          <Text style={[styles.empty, { color: colors.textSecondary }]}>
+            You have no booking requests yet.
+          </Text>
         }
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: colors.cardBgLight }]}>
             <Image source={item.image} style={styles.image} />
             <View style={{ flex: 1, maxWidth: 300 }}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>₱{item.price}</Text>
-              <Text style={styles.instruments}>
+              <Text style={[styles.name, { color: colors.textDark }]}>
+                {item.name}
+              </Text>
+              <Text style={[styles.price, { color: colors.textSecondary }]}>
+                ₱{item.price}
+              </Text>
+              <Text style={[styles.instruments, { color: colors.textDark }]}>
                 {item.instruments.join(" + ")}
               </Text>
 
-              <View style={styles.bookingBox}>
-                <Text style={styles.bookingLabel}>Requested by:</Text>
-                <Text style={styles.bookingValue}>{item.booking.name}</Text>
+              <View
+                style={[
+                  styles.bookingBox,
+                  { backgroundColor: colors.background },
+                ]}
+              >
+                <Text
+                  style={[styles.bookingLabel, { color: colors.textSecondary }]}
+                >
+                  Requested by:
+                </Text>
+                <Text style={[styles.bookingValue, { color: colors.textDark }]}>
+                  {item.booking.name}
+                </Text>
 
-                <Text style={styles.bookingLabel}>Contact:</Text>
-                <Text style={styles.bookingValue}>{item.booking.contact}</Text>
+                <Text
+                  style={[styles.bookingLabel, { color: colors.textSecondary }]}
+                >
+                  Contact:
+                </Text>
+                <Text style={[styles.bookingValue, { color: colors.textDark }]}>
+                  {item.booking.contact}
+                </Text>
 
-                <Text style={styles.bookingLabel}>Event date:</Text>
-                <Text style={styles.bookingValue}>
+                <Text
+                  style={[styles.bookingLabel, { color: colors.textSecondary }]}
+                >
+                  Event date:
+                </Text>
+                <Text style={[styles.bookingValue, { color: colors.textDark }]}>
                   {item.booking.eventDate}
                 </Text>
               </View>
@@ -78,17 +115,37 @@ export default function CartScreen() {
           </View>
         )}
       />
-      <Text style={styles.total}>Estimated Total: ₱{total}</Text>
+      <Text style={[styles.total, { color: colors.textDark }]}>
+        Estimated Total: ₱{total}
+      </Text>
 
-      <TouchableOpacity style={styles.checkoutButton} onPress={handleSubmit}>
-        <Text style={styles.checkoutButtonText}>Submit Booking Requests</Text>
+      <TouchableOpacity
+        style={[
+          styles.checkoutButton,
+          { backgroundColor: colors.accent },
+          isSubmitting && styles.checkoutButtonDisabled,
+        ]}
+        onPress={handleSubmit}
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <ActivityIndicator color={colors.textDark} />
+        ) : (
+          <Text style={[styles.checkoutButtonText, { color: colors.textDark }]}>
+            Submit Booking Requests
+          </Text>
+        )}
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.continueButton}
         onPress={() => router.push("/")}
       >
-        <Text style={styles.continueButtonText}>Browse More Packages</Text>
+        <Text
+          style={[styles.continueButtonText, { color: colors.textSecondary }]}
+        >
+          Browse More Packages
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -101,13 +158,11 @@ const styles = StyleSheet.create({
     maxWidth: 600,
     alignSelf: "center",
     padding: 16,
-    backgroundColor: "#FAF3E8",
   },
   card: {
     flexDirection: "row",
     width: "100%",
     marginBottom: 14,
-    backgroundColor: "#F5EBDD",
     padding: 14,
     borderRadius: 18,
     shadowColor: "#000",
@@ -126,31 +181,25 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 17,
     fontWeight: "700",
-    color: "#4A2C20",
   },
   price: {
     fontSize: 14,
-    color: "#8A6E52",
     marginBottom: 4,
   },
   instruments: {
     fontSize: 13,
-    color: "#4A2C20",
     marginBottom: 8,
   },
   bookingBox: {
-    backgroundColor: "#EFE2CE",
     borderRadius: 10,
     padding: 8,
     marginBottom: 8,
   },
   bookingLabel: {
     fontSize: 11,
-    color: "#8A6E52",
   },
   bookingValue: {
     fontSize: 13,
-    color: "#2B1810",
     fontWeight: "600",
     marginBottom: 4,
   },
@@ -167,17 +216,19 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginTop: 16,
-    color: "#4A2C20",
   },
   checkoutButton: {
-    backgroundColor: "#D6A85F",
     paddingVertical: 12,
     borderRadius: 25,
     marginTop: 16,
     alignItems: "center",
+    justifyContent: "center",
+    minHeight: 44,
+  },
+  checkoutButtonDisabled: {
+    opacity: 0.6,
   },
   checkoutButtonText: {
-    color: "#2B1810",
     fontWeight: "700",
     fontSize: 15,
   },
@@ -188,7 +239,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   continueButtonText: {
-    color: "#8A6E52",
     fontSize: 14,
     textDecorationLine: "underline",
   },
@@ -196,6 +246,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 50,
     fontSize: 16,
-    color: "#8A6E52",
   },
 });

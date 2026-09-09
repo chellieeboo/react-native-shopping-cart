@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "../app/context/ThemeContext";
 
 export default function ProductCard({
   item,
@@ -17,6 +18,7 @@ export default function ProductCard({
   item: any;
   onAdd: any;
 }) {
+  const { colors } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
@@ -47,21 +49,31 @@ export default function ProductCard({
   };
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
       <Pressable onPress={() => setModalVisible(true)}>
         <Image source={item.image} style={styles.image} />
       </Pressable>
 
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.price}>₱{item.price}</Text>
-      <Text style={styles.instruments}>{item.instruments.join(" + ")}</Text>
-      <Text style={styles.eventTypes}>Fits: {item.eventTypes.join(", ")}</Text>
+      <Text style={[styles.name, { color: colors.textLight }]}>
+        {item.name}
+      </Text>
+      <Text style={[styles.price, { color: colors.accent }]}>
+        ₱{item.price}
+      </Text>
+      <Text style={[styles.instruments, { color: colors.textMuted }]}>
+        {item.instruments.join(" + ")}
+      </Text>
+      <Text style={[styles.eventTypes, { color: colors.accent }]}>
+        Fits: {item.eventTypes.join(", ")}
+      </Text>
 
       <TouchableOpacity
-        style={styles.addButton}
+        style={[styles.addButton, { backgroundColor: colors.accent }]}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={styles.addButtonText}>Book This Package</Text>
+        <Text style={[styles.addButtonText, { color: colors.textDark }]}>
+          Book This Package
+        </Text>
       </TouchableOpacity>
 
       <Modal
@@ -71,15 +83,23 @@ export default function ProductCard({
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View
+            style={[styles.modalContent, { backgroundColor: colors.cardBg }]}
+          >
             <Image source={item.image} style={styles.modalImage} />
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.price}>₱{item.price}</Text>
-            <Text style={styles.description}>{item.description}</Text>
-            <Text style={styles.instruments}>
+            <Text style={[styles.name, { color: colors.textLight }]}>
+              {item.name}
+            </Text>
+            <Text style={[styles.price, { color: colors.accent }]}>
+              ₱{item.price}
+            </Text>
+            <Text style={[styles.description, { color: colors.textMuted }]}>
+              {item.description}
+            </Text>
+            <Text style={[styles.instruments, { color: colors.textMuted }]}>
               Instruments: {item.instruments.join(" + ")}
             </Text>
-            <Text style={styles.eventTypes}>
+            <Text style={[styles.eventTypes, { color: colors.accent }]}>
               Best for: {item.eventTypes.join(", ")}
             </Text>
 
@@ -88,14 +108,20 @@ export default function ProductCard({
               placeholderTextColor="#B8A896"
               value={name}
               onChangeText={setName}
-              style={styles.input}
+              style={[
+                styles.input,
+                { backgroundColor: colors.cardBgLight, color: colors.textDark },
+              ]}
             />
             <TextInput
               placeholder="Contact number"
               placeholderTextColor="#B8A896"
               value={contact}
               onChangeText={setContact}
-              style={styles.input}
+              style={[
+                styles.input,
+                { backgroundColor: colors.cardBgLight, color: colors.textDark },
+              ]}
               keyboardType="phone-pad"
             />
             <TextInput
@@ -103,23 +129,35 @@ export default function ProductCard({
               placeholderTextColor="#B8A896"
               value={eventDate}
               onChangeText={setEventDate}
-              style={styles.input}
+              style={[
+                styles.input,
+                { backgroundColor: colors.cardBgLight, color: colors.textDark },
+              ]}
             />
 
             {error !== "" && <Text style={styles.errorText}>{error}</Text>}
 
             <TouchableOpacity
-              style={[styles.addButton, { marginTop: 12 }]}
+              style={[
+                styles.addButton,
+                { backgroundColor: colors.accent, marginTop: 12 },
+              ]}
               onPress={handleSubmit}
             >
-              <Text style={styles.addButtonText}>Submit Booking Request</Text>
+              <Text style={[styles.addButtonText, { color: colors.textDark }]}>
+                Submit Booking Request
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
               style={styles.closeButton}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text
+                style={[styles.closeButtonText, { color: colors.textMuted }]}
+              >
+                Close
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -130,7 +168,6 @@ export default function ProductCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#4A2C20",
     padding: 18,
     margin: 12,
     borderRadius: 20,
@@ -151,42 +188,35 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#F5EBDD",
     marginBottom: 4,
     textAlign: "center",
   },
   price: {
     fontSize: 16,
-    color: "#D6A85F",
     fontWeight: "600",
     marginBottom: 6,
   },
   description: {
     fontSize: 13,
-    color: "#E8DED2",
     textAlign: "center",
     marginBottom: 8,
   },
   instruments: {
     fontSize: 13,
-    color: "#E8DED2",
     marginBottom: 4,
   },
   eventTypes: {
     fontSize: 12,
-    color: "#D6A85F",
     fontStyle: "italic",
     marginBottom: 10,
     textAlign: "center",
   },
   addButton: {
-    backgroundColor: "#D6A85F",
     paddingVertical: 10,
     paddingHorizontal: 28,
     borderRadius: 25,
   },
   addButtonText: {
-    color: "#2B1810",
     fontWeight: "700",
     fontSize: 14,
   },
@@ -195,7 +225,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   closeButtonText: {
-    color: "#E8DED2",
     fontSize: 13,
     textDecorationLine: "underline",
   },
@@ -206,7 +235,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#4A2C20",
     padding: 28,
     borderRadius: 20,
     alignItems: "center",
@@ -221,12 +249,10 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "100%",
-    backgroundColor: "#F5EBDD",
     borderRadius: 10,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginBottom: 10,
-    color: "#2B1810",
     fontSize: 14,
   },
   errorText: {
