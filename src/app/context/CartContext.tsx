@@ -1,20 +1,17 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { packages } from "../../data/packages";
+import { products } from "../../data/products";
 
-type Package = (typeof packages)[number];
+export type BaseProduct = (typeof products)[number];
 
-export type BookingInfo = {
-  name: string;
-  contact: string;
-  eventDate: string;
+export type CartItem = BaseProduct & {
+  quantity: number;
 };
 
-export type BookingRequest = Package & { booking: BookingInfo };
-
 type CartContextType = {
-  cart: BookingRequest[];
+  cart: CartItem[];
   cartCount: number;
-  addToCart: (pkg: Package, booking: BookingInfo) => void;
+  addToCart: (product: BaseProduct, quantity?: number) => void;
+  updateQuantity: (id: string, delta: number) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
 };
@@ -23,33 +20,45 @@ const CartContext = createContext<CartContextType>({
   cart: [],
   cartCount: 0,
   addToCart: () => {},
+  updateQuantity: () => {},
   removeFromCart: () => {},
   clearCart: () => {},
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<BookingRequest[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
-  const addToCart = (pkg: Package, booking: BookingInfo) => {
-    setCart((prev) => {
-      const alreadyRequested = prev.find((item) => item.id === pkg.id);
-
-      if (alreadyRequested) {
-        if (typeof window !== "undefined") {
-          window.alert(
-            `You've already requested ${pkg.name}. Remove it first if you'd like to change your booking.`,
-          );
-        }
-        return prev;
+  const addToCart = (product: BaseProduct, qty: number = 1) => {
+    setCart((prevCart) => {
+      const existingIndex = prevCart.findIndex(
+        (item) => item.id === product.id,
+      );
+      if (existingIndex > -1) {
+        const updated = [...prevCart];
+        updated[existingIndex].quantity += qty;
+        return updated;
+      } else {
+        return [...prevCart, { ...product, quantity: qty }];
       }
-
-      if (typeof window !== "undefined") {
-        window.alert(
-          `Your request for ${pkg.name} has been added. We'll contact you to confirm your booking.`,
-        );
-      }
-      return [...prev, { ...pkg, booking }];
     });
+
+    if (typeof window !== "undefined") {
+      window.alert(`${qty} x ${product.name} added to your shopping cart! 🛒`);
+    }
+  };
+
+  const updateQuantity = (id: string, delta: number) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((item) => {
+          if (item.id === id) {
+            const newQty = item.quantity + delta;
+            return newQty > 0 ? { ...item, quantity: newQty } : null;
+          }
+          return item;
+        })
+        .filter((item): item is CartItem => item !== null),
+    );
   };
 
   const removeFromCart = (id: string) => {
@@ -60,7 +69,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCart([]);
   };
 
-  const cartCount = cart.length;
+  // Kina-calculate ang total number ng items (sum ng lahat ng quantities)
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
@@ -68,6 +78,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cart,
         cartCount,
         addToCart,
+        updateQuantity,
         removeFromCart,
         clearCart,
       }}

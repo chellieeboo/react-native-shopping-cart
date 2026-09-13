@@ -1,7 +1,7 @@
 import { FlatList, View } from "react-native";
 import Header from "../components/header";
 import ProductCard from "../components/productcard";
-import { packages } from "../data/packages";
+import { packages } from "../data/product";
 import { useCart } from "./context/CartContext";
 
 export default function WeddingScreen() {

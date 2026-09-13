@@ -4,11 +4,25 @@ import { useTheme } from "../app/context/ThemeContext";
 
 type HeaderProps = {
   cartCount: number;
+  selectedCategory?: string;
+  onSelectCategory?: (category: string) => void;
 };
 
-export default function Header({ cartCount }: HeaderProps) {
+export default function Header({
+  cartCount,
+  selectedCategory = "All",
+  onSelectCategory,
+}: HeaderProps) {
   const router = useRouter();
   const { isDark, toggleTheme, colors } = useTheme();
+
+  const categories = [
+    "All",
+    "Guitars",
+    "Keyboards",
+    "Synthesizers",
+    "Accessories",
+  ];
 
   return (
     <View
@@ -20,6 +34,7 @@ export default function Header({ cartCount }: HeaderProps) {
         alignItems: "center",
       }}
     >
+      {/* Dark / Light Mode Toggle */}
       <TouchableOpacity
         onPress={toggleTheme}
         style={{
@@ -37,6 +52,7 @@ export default function Header({ cartCount }: HeaderProps) {
         </Text>
       </TouchableOpacity>
 
+      {/* Brand Title & Subtitle */}
       <Text
         style={{
           color: colors.textLight,
@@ -56,9 +72,10 @@ export default function Header({ cartCount }: HeaderProps) {
           letterSpacing: 0.5,
         }}
       >
-        Live Music for Your Event
+        Audio Gear & Studio Equipment
       </Text>
 
+      {/* Accent Line Separator */}
       <View
         style={{
           width: 40,
@@ -70,10 +87,12 @@ export default function Header({ cartCount }: HeaderProps) {
         }}
       />
 
+      {/* Shopping Cart Indicator */}
       <Text style={{ color: colors.textLight, fontSize: 13 }}>
-        Bookings: {cartCount}
+        Cart: {cartCount} items
       </Text>
 
+      {/* Cart Navigation Button */}
       <TouchableOpacity
         onPress={() => router.push("/cart")}
         style={{
@@ -87,79 +106,45 @@ export default function Header({ cartCount }: HeaderProps) {
         <Text
           style={{ color: colors.textDark, fontWeight: "700", fontSize: 13 }}
         >
-          View Bookings
+          View Shopping Cart 🛒
         </Text>
       </TouchableOpacity>
 
+      {/* Product Categories Bar */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{ marginTop: 16, width: "100%" }}
         contentContainerStyle={{ paddingHorizontal: 8, gap: 10 }}
       >
-        <TouchableOpacity
-          onPress={() => router.push("/")}
-          style={{
-            backgroundColor: colors.categoryBtn,
-            paddingVertical: 8,
-            paddingHorizontal: 18,
-            borderRadius: 20,
-          }}
-        >
-          <Text
-            style={{ color: colors.textLight, fontWeight: "600", fontSize: 13 }}
+        {categories.map((category) => (
+          <TouchableOpacity
+            key={category}
+            onPress={() => onSelectCategory && onSelectCategory(category)}
+            style={{
+              backgroundColor:
+                selectedCategory === category
+                  ? colors.accent
+                  : colors.categoryBtn,
+              paddingVertical: 8,
+              paddingHorizontal: 18,
+              borderRadius: 20,
+            }}
           >
-            All
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => router.push("/wedding")}
-          style={{
-            backgroundColor: colors.categoryBtn,
-            paddingVertical: 8,
-            paddingHorizontal: 18,
-            borderRadius: 20,
-          }}
-        >
-          <Text
-            style={{ color: colors.textLight, fontWeight: "600", fontSize: 13 }}
-          >
-            Wedding
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => router.push("/celebrations")}
-          style={{
-            backgroundColor: colors.categoryBtn,
-            paddingVertical: 8,
-            paddingHorizontal: 18,
-            borderRadius: 20,
-          }}
-        >
-          <Text
-            style={{ color: colors.textLight, fontWeight: "600", fontSize: 13 }}
-          >
-            Celebrations
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => router.push("/memorial")}
-          style={{
-            backgroundColor: colors.categoryBtn,
-            paddingVertical: 8,
-            paddingHorizontal: 18,
-            borderRadius: 20,
-          }}
-        >
-          <Text
-            style={{ color: colors.textLight, fontWeight: "600", fontSize: 13 }}
-          >
-            Memorial
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                color:
+                  selectedCategory === category
+                    ? colors.textDark
+                    : colors.textLight,
+                fontWeight: "600",
+                fontSize: 13,
+              }}
+            >
+              {category}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   );

@@ -5,74 +5,81 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { useTheme } from "../app/context/ThemeContext";
 
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  inStock: boolean;
+  description: string;
+  image: any;
+};
+
 export default function ProductCard({
   item,
   onAdd,
 }: {
-  item: any;
-  onAdd: any;
+  item: Product;
+  onAdd: (product: Product, quantity: number) => void;
 }) {
-  const { colors } = useTheme();
+  const { isDark, colors } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [error, setError] = useState("");
+  const [quantity, setQuantity] = useState(1);
 
-  const handleSubmit = () => {
-    if (name.trim() === "") {
-      setError("Please enter your name.");
-      return;
-    }
-    if (contact.trim() === "") {
-      setError("Please enter your contact number.");
-      return;
-    }
-    if (eventDate.trim() === "") {
-      setError("Please enter your preferred event date.");
-      return;
-    }
+  const incrementQty = () => setQuantity((prev) => prev + 1);
+  const decrementQty = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
-    setError("");
-    onAdd(item, { name, contact, eventDate });
-
-    setName("");
-    setContact("");
-    setEventDate("");
-    setModalVisible(false);
+  const handleAdd = () => {
+    onAdd(item, quantity);
+    setQuantity(1);
   };
 
+  const cardBgColor = isDark ? "#2D2622" : colors.cardBg;
+  const categoryTextColor = isDark ? "#F4C430" : "#8B5E3C";
+
   return (
-    <View style={[styles.card, { backgroundColor: colors.cardBg }]}>
+    <View style={[styles.card, { backgroundColor: cardBgColor }]}>
       <Pressable onPress={() => setModalVisible(true)}>
         <Image source={item.image} style={styles.image} />
       </Pressable>
 
+      <Text style={[styles.categoryTag, { color: categoryTextColor }]}>
+        {item.category}
+      </Text>
+
       <Text style={[styles.name, { color: colors.textLight }]}>
         {item.name}
       </Text>
+
       <Text style={[styles.price, { color: colors.accent }]}>
-        ₱{item.price}
+        ₱{item.price ? item.price.toLocaleString() : item.price}
       </Text>
-      <Text style={[styles.instruments, { color: colors.textMuted }]}>
-        {item.instruments.join(" + ")}
-      </Text>
-      <Text style={[styles.eventTypes, { color: colors.accent }]}>
-        Fits: {item.eventTypes.join(", ")}
-      </Text>
+
+      <View style={styles.quantityContainer}>
+        <TouchableOpacity style={styles.qtyBtn} onPress={decrementQty}>
+          <Text style={styles.qtyBtnText}>-</Text>
+        </TouchableOpacity>
+
+        <Text style={[styles.qtyText, { color: colors.textLight }]}>
+          {quantity}
+        </Text>
+
+        <TouchableOpacity style={styles.qtyBtn} onPress={incrementQty}>
+          <Text style={styles.qtyBtnText}>+</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: colors.accent }]}
-        onPress={() => setModalVisible(true)}
+        onPress={handleAdd}
       >
         <Text style={[styles.addButtonText, { color: colors.textDark }]}>
-          Book This Package
+          🛒 Add {quantity} to Cart
         </Text>
       </TouchableOpacity>
 
@@ -83,69 +90,60 @@ export default function ProductCard({
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View
-            style={[styles.modalContent, { backgroundColor: colors.cardBg }]}
-          >
+          <View style={[styles.modalContent, { backgroundColor: cardBgColor }]}>
             <Image source={item.image} style={styles.modalImage} />
+
+            <Text style={[styles.categoryTag, { color: categoryTextColor }]}>
+              {item.category}
+            </Text>
+
             <Text style={[styles.name, { color: colors.textLight }]}>
               {item.name}
             </Text>
+
             <Text style={[styles.price, { color: colors.accent }]}>
-              ₱{item.price}
+              ₱{item.price ? item.price.toLocaleString() : item.price}
             </Text>
+
             <Text style={[styles.description, { color: colors.textMuted }]}>
               {item.description}
             </Text>
-            <Text style={[styles.instruments, { color: colors.textMuted }]}>
-              Instruments: {item.instruments.join(" + ")}
-            </Text>
-            <Text style={[styles.eventTypes, { color: colors.accent }]}>
-              Best for: {item.eventTypes.join(", ")}
+
+            <Text style={[styles.stockStatus, { color: "#4CAF50" }]}>
+              ✓ In Stock & Ready to Ship
             </Text>
 
-            <TextInput
-              placeholder="Your name"
-              placeholderTextColor="#B8A896"
-              value={name}
-              onChangeText={setName}
-              style={[
-                styles.input,
-                { backgroundColor: colors.cardBgLight, color: colors.textDark },
-              ]}
-            />
-            <TextInput
-              placeholder="Contact number"
-              placeholderTextColor="#B8A896"
-              value={contact}
-              onChangeText={setContact}
-              style={[
-                styles.input,
-                { backgroundColor: colors.cardBgLight, color: colors.textDark },
-              ]}
-              keyboardType="phone-pad"
-            />
-            <TextInput
-              placeholder="Preferred event date (MM/DD/YYYY)"
-              placeholderTextColor="#B8A896"
-              value={eventDate}
-              onChangeText={setEventDate}
-              style={[
-                styles.input,
-                { backgroundColor: colors.cardBgLight, color: colors.textDark },
-              ]}
-            />
+            <View style={[styles.quantityContainer, { marginVertical: 12 }]}>
+              <TouchableOpacity style={styles.qtyBtn} onPress={decrementQty}>
+                <Text style={styles.qtyBtnText}>-</Text>
+              </TouchableOpacity>
 
-            {error !== "" && <Text style={styles.errorText}>{error}</Text>}
+              <Text style={[styles.qtyText, { color: colors.textLight }]}>
+                {quantity}
+              </Text>
+
+              <TouchableOpacity style={styles.qtyBtn} onPress={incrementQty}>
+                <Text style={styles.qtyBtnText}>+</Text>
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
               style={[
                 styles.addButton,
-                { backgroundColor: colors.accent, marginTop: 12 },
+                { backgroundColor: colors.accent, width: "100%" },
               ]}
-              onPress={handleSubmit}
+              onPress={() => {
+                handleAdd();
+                setModalVisible(false);
+              }}
             >
-              <Text style={[styles.addButtonText, { color: colors.textDark }]}>
-                Submit Booking Request
+              <Text
+                style={[
+                  styles.addButtonText,
+                  { color: colors.textDark, textAlign: "center" },
+                ]}
+              >
+                Add {quantity} to Cart
               </Text>
             </TouchableOpacity>
 
@@ -156,7 +154,7 @@ export default function ProductCard({
               <Text
                 style={[styles.closeButtonText, { color: colors.textMuted }]}
               >
-                Close
+                Close Quick View
               </Text>
             </TouchableOpacity>
           </View>
@@ -174,7 +172,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
   },
@@ -183,37 +181,63 @@ const styles = StyleSheet.create({
     height: 180,
     resizeMode: "cover",
     borderRadius: 14,
-    marginBottom: 12,
+    marginBottom: 10,
+  },
+  categoryTag: {
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: 4,
   },
   name: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "700",
     marginBottom: 4,
     textAlign: "center",
   },
   price: {
     fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 6,
+    fontWeight: "700",
+    marginBottom: 8,
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  qtyBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  qtyBtnText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#D4AF37",
+  },
+  qtyText: {
+    fontSize: 15,
+    fontWeight: "700",
+    marginHorizontal: 12,
   },
   description: {
     fontSize: 13,
     textAlign: "center",
-    marginBottom: 8,
+    marginBottom: 10,
+    lineHeight: 18,
   },
-  instruments: {
-    fontSize: 13,
+  stockStatus: {
+    fontSize: 12,
+    fontWeight: "600",
     marginBottom: 4,
   },
-  eventTypes: {
-    fontSize: 12,
-    fontStyle: "italic",
-    marginBottom: 10,
-    textAlign: "center",
-  },
   addButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 28,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
     borderRadius: 25,
   },
   addButtonText: {
@@ -221,8 +245,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   closeButton: {
-    marginTop: 8,
-    paddingVertical: 6,
+    marginTop: 12,
+    paddingVertical: 8,
   },
   closeButtonText: {
     fontSize: 13,
@@ -230,15 +254,16 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
+    backgroundColor: "rgba(0,0,0,0.75)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    padding: 28,
+    padding: 24,
     borderRadius: 20,
     alignItems: "center",
-    width: "80%",
+    width: "85%",
+    maxWidth: 400,
   },
   modalImage: {
     width: 200,
@@ -246,19 +271,5 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 14,
     marginBottom: 12,
-  },
-  input: {
-    width: "100%",
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginBottom: 10,
-    fontSize: 14,
-  },
-  errorText: {
-    color: "#FF8A80",
-    fontSize: 12,
-    marginBottom: 8,
-    textAlign: "center",
   },
 });
