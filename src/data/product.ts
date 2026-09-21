@@ -1,4 +1,4 @@
-// roChordz product catalog
+//  product catalog
 //
 // Each product follows the shared `Product` shape below. Items that don't
 // have a photographed asset yet (`image` omitted) fall back to a themed
@@ -42,7 +42,7 @@ export const products: Product[] = [
   // ---------------- Guitars ----------------
   {
     id: "1",
-    name: "roChordz Acoustic Pro Guitar",
+    name: " Acoustic Pro Guitar",
     category: "Guitars",
     price: 8500,
     image: require("../../assets/images/guitar/Acoustic.png"),
@@ -52,7 +52,7 @@ export const products: Product[] = [
   },
   {
     id: "2",
-    name: "roChordz Custom Electric Guitar",
+    name: " Custom Electric Guitar",
     category: "Guitars",
     price: 15500,
     image: require("../../assets/images/guitar/electric.png"),
@@ -62,7 +62,7 @@ export const products: Product[] = [
   },
   {
     id: "3",
-    name: "roChordz Studio Bass Guitar",
+    name: " Studio Bass Guitar",
     category: "Guitars",
     price: 17800,
     icon: "🎸",
@@ -74,7 +74,7 @@ export const products: Product[] = [
   // ---------------- Keyboards ----------------
   {
     id: "4",
-    name: "roChordz Digital Studio Piano",
+    name: " Digital Studio Piano",
     category: "Keyboards",
     price: 32500,
     image: require("../../assets/images/piano/digital.png"),
@@ -84,7 +84,7 @@ export const products: Product[] = [
   },
   {
     id: "5",
-    name: "roChordz Portable MIDI Keyboard",
+    name: " Portable MIDI Keyboard",
     category: "Keyboards",
     price: 6200,
     image: require("../../assets/images/piano/mini.png"),
@@ -94,7 +94,7 @@ export const products: Product[] = [
   },
   {
     id: "6",
-    name: "roChordz Performance Synthesizer",
+    name: " Performance Synthesizer",
     category: "Keyboards",
     price: 28900,
     image: require("../../assets/images/piano/synth keyboard.png"),
@@ -106,7 +106,7 @@ export const products: Product[] = [
   // ---------------- Drums ----------------
   {
     id: "7",
-    name: "roChordz Electronic Drum Kit",
+    name: " Electronic Drum Kit",
     category: "Drums",
     price: 24500,
     image: require("../../assets/images/drum/Full drum set.png"),
@@ -116,7 +116,7 @@ export const products: Product[] = [
   },
   {
     id: "8",
-    name: "roChordz Bongo Drum Set",
+    name: " Bongo Drum Set",
     category: "Drums",
     price: 3200,
     image: require("../../assets/images/drum/bongos.png"),
@@ -126,7 +126,7 @@ export const products: Product[] = [
   },
   {
     id: "9",
-    name: "roChordz Acoustic Cajon Drum",
+    name: " Acoustic Cajon Drum",
     category: "Drums",
     price: 6800,
     image: require("../../assets/images/drum/cajon.png"),
@@ -138,7 +138,7 @@ export const products: Product[] = [
   // ---------------- String Instruments ----------------
   {
     id: "10",
-    name: "roChordz Classic Ukulele",
+    name: " Classic Ukulele",
     category: "String Instruments",
     price: 2400,
     image: require("../../assets/images/guitar/ukelele.png"),
@@ -148,7 +148,7 @@ export const products: Product[] = [
   },
   {
     id: "11",
-    name: "roChordz Student Violin",
+    name: " Student Violin",
     category: "String Instruments",
     price: 9500,
     icon: "🎻",
@@ -160,7 +160,7 @@ export const products: Product[] = [
   // ---------------- Wind Instruments ----------------
   {
     id: "12",
-    name: "roChordz Concert Flute",
+    name: " Concert Flute",
     category: "Wind Instruments",
     price: 11200,
     icon: "🪈",
@@ -170,7 +170,7 @@ export const products: Product[] = [
   },
   {
     id: "13",
-    name: "roChordz Alto Saxophone",
+    name: " Alto Saxophone",
     category: "Wind Instruments",
     price: 26800,
     icon: "🎷",
@@ -182,7 +182,7 @@ export const products: Product[] = [
   // ---------------- Microphones ----------------
   {
     id: "14",
-    name: "roChordz Condenser Microphone",
+    name: " Condenser Microphone",
     category: "Microphones",
     price: 5400,
     icon: "🎤",
@@ -192,7 +192,7 @@ export const products: Product[] = [
   },
   {
     id: "15",
-    name: "roChordz Dynamic Vocal Microphone",
+    name: " Dynamic Vocal Microphone",
     category: "Microphones",
     price: 3100,
     icon: "🎙️",
@@ -204,7 +204,7 @@ export const products: Product[] = [
   // ---------------- Accessories ----------------
   {
     id: "16",
-    name: "roChordz Clip-On Chromatic Tuner",
+    name: " Clip-On Chromatic Tuner",
     category: "Accessories",
     price: 650,
     image: require("../../assets/images/Accessories/Clip-on tuner.png"),
@@ -214,7 +214,7 @@ export const products: Product[] = [
   },
   {
     id: "17",
-    name: "roChordz Guitar Pick Set",
+    name: " Guitar Pick Set",
     category: "Accessories",
     price: 250,
     image: require("../../assets/images/Accessories/Guitar pick set.png"),
@@ -224,7 +224,7 @@ export const products: Product[] = [
   },
   {
     id: "18",
-    name: "roChordz Adjustable Music Stand",
+    name: " Adjustable Music Stand",
     category: "Accessories",
     price: 1450,
     image: require("../../assets/images/Accessories/Music stand.png"),

@@ -1,12 +1,12 @@
 import { useRouter } from "expo-router";
 import { useRef } from "react";
 import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Animated,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Product } from "../data/product";
@@ -121,7 +121,7 @@ export default function ProductCard({
             { color: outOfStock ? colors.danger : colors.textSecondary },
           ]}
         >
-          {outOfStock ? "Out of stock" : `${item.stock} in stock`}
+          {outOfStock ? "Out of stock" : `${remainingStock} in stock`}
         </Text>
       </View>
     </Pressable>
