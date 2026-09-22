@@ -1,12 +1,12 @@
 import { useRouter } from "expo-router";
 import { useRef } from "react";
 import {
-    Animated,
-    Pressable,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useTheme } from "../context/ThemeContext";
 import { Product } from "../data/product";
@@ -81,17 +81,17 @@ export default function ProductCard({
         </Text>
 
         <Text
-          style={[
-            styles.name,
-            { color: colors.textDark, minHeight: compact ? 17 : 34 },
-          ]}
-          numberOfLines={compact ? 1 : 2}
+          style={[styles.name, { color: colors.textDark, minHeight: 34 }]}
+          numberOfLines={2}
         >
           {item.name}
         </Text>
 
         <View style={styles.bottomRow}>
-          <Text style={[styles.price, { color: colors.textDark }]}>
+          <Text
+            style={[styles.price, { color: colors.textDark }]}
+            numberOfLines={1}
+          >
             ₱{item.price.toLocaleString()}
           </Text>
 
@@ -106,7 +106,7 @@ export default function ProductCard({
               ]}
               onPress={handleAdd}
               disabled={outOfStock}
-              hitSlop={6}
+              hitSlop={8}
             >
               <Text style={[styles.addBtnText, { color: colors.textDark }]}>
                 {outOfStock ? "✕" : "+"}
@@ -137,18 +137,14 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1,
     overflow: "hidden",
-    shadowColor: "#1B2430",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    boxShadow: "0px 3px 8px rgba(27,36,48,0.06)",
   },
   cardCompact: {
-    flexBasis: 140,
+    flexBasis: 154,
     flexGrow: 0,
     flexShrink: 0,
-    maxWidth: 140,
-    width: 140,
+    maxWidth: 154,
+    width: 154,
     margin: 0,
     marginRight: 12,
   },
@@ -160,40 +156,43 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   category: {
-    fontSize: 10.5,
+    fontSize: 11,
     fontWeight: "600",
     marginBottom: 3,
   },
   name: {
-    fontSize: 13.5,
+    fontSize: 14,
     fontWeight: "700",
-    lineHeight: 17,
+    lineHeight: 18,
   },
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 8,
+    marginTop: 9,
+    gap: 6,
   },
   price: {
-    fontSize: 14.5,
+    fontSize: 15,
     fontWeight: "800",
+    flexShrink: 1,
   },
   addBtn: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   },
   addBtnText: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: "800",
     marginTop: -1,
   },
   stock: {
     fontSize: 10,
     fontWeight: "600",
-    marginTop: 5,
+    marginTop: 6,
   },
 });

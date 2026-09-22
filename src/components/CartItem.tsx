@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTheme } from "../context/ThemeContext";
 import { CartItem as CartItemType } from "../context/CartContext";
+import { useTheme } from "../context/ThemeContext";
 import ProductImage from "./ProductImage";
 import QuantitySelector from "./QuantitySelector";
 
@@ -22,14 +22,22 @@ export default function CartItem({
 
   return (
     <View style={[styles.card, { backgroundColor: cardBgColor }]}>
-      <ProductImage image={item.image} icon={item.icon} size={90} borderRadius={12} />
+      <ProductImage
+        image={item.image}
+        icon={item.icon}
+        size={90}
+        borderRadius={12}
+      />
 
       <View style={styles.details}>
         <View>
           <Text style={[styles.category, { color: colors.accent }]}>
             {item.category}
           </Text>
-          <Text style={[styles.name, { color: colors.textDark }]} numberOfLines={2}>
+          <Text
+            style={[styles.name, { color: colors.textDark }]}
+            numberOfLines={2}
+          >
             {item.name}
           </Text>
           <Text style={[styles.price, { color: colors.textDark }]}>
@@ -66,11 +74,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     padding: 14,
     borderRadius: 18,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 3,
+    boxShadow: "0px 2px 6px rgba(0,0,0,0.12)",
     gap: 14,
   },
   details: {

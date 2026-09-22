@@ -25,7 +25,7 @@ const CATEGORY_TILES: {
   { label: "Strings", value: "String Instruments", icon: "🎻" },
   { label: "Wind", value: "Wind Instruments", icon: "🎷" },
   { label: "Audio", value: "Microphones", icon: "🎤" },
-  { label: "Accessories", value: "Accessories", icon: "🎛️" },
+  { label: "Accessories", value: "Accessories", icon: "🧰" },
 ];
 
 export default function CategoryBar({
@@ -104,6 +104,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 24,
+    lineHeight: 28,
+    textAlign: "center",
+    includeFontPadding: false,
   },
   label: {
     fontSize: 11,

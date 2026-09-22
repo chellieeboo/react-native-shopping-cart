@@ -110,11 +110,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "rgba(255,255,255,0.12)",
     transform: [{ rotate: "4deg" }],
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 14,
-    elevation: 10,
+    boxShadow: "0px 8px 14px rgba(0,0,0,0.35)",
   },
   image: {
     width: "100%",
