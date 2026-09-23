@@ -42,12 +42,15 @@ export default function ProductCard({
         Animated.timing(scale, {
           toValue: 0.8,
           duration: 90,
-          useNativeDriver: true,
+          // useNativeDriver:true triggers "native animated module is
+          // missing" on Expo Web — this runs on native too, so false is
+          // the cross-platform-safe choice for a simple scale bounce.
+          useNativeDriver: false,
         }),
         Animated.spring(scale, {
           toValue: 1,
           friction: 4,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ]).start();
     }

@@ -8,6 +8,7 @@ import ProductCard from "../components/productcard";
 import SectionHeader from "../components/Sectionheader";
 import { useCart } from "../context/CartContext";
 import { useTheme } from "../context/ThemeContext";
+import type { ProductCategory } from "../data/product";
 import { products } from "../data/product";
 
 // Hand-picked curated sets for the default (unfiltered) home layout.
@@ -62,10 +63,10 @@ export default function HomeScreen() {
         ? "All Instruments"
         : "Featured Instruments";
 
-  const handleShopNow = () => {
-    setSelectedCategory("All");
+  const handleShopCategory = (category: ProductCategory) => {
+    setSelectedCategory(category);
     setSearchQuery("");
-    setBrowseAll(true);
+    setBrowseAll(false);
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
   };
 
@@ -100,7 +101,7 @@ export default function HomeScreen() {
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
             />
-            <Hero onShopNow={handleShopNow} />
+            <Hero onShopCategory={handleShopCategory} />
 
             <View style={styles.sectionSpacer} />
             <SectionHeader
