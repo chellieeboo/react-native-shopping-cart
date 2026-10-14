@@ -5,25 +5,10 @@ import { useTheme } from "../context/ThemeContext";
 type ProductImageProps = {
   image?: any;
   icon?: string;
-  /** Fixed pixel size (used on the details screen / cart row). Omit to
-   * responsively fill the parent's width as a square tile (used on grid
-   * product cards so they never overflow narrow screens). */
   size?: number;
   borderRadius?: number;
 };
 
-/**
- * Renders a product's photo when available, otherwise falls back to a
- * themed tile with an emoji icon so every product card / details screen
- * looks consistent, regardless of whether a photographed asset exists yet.
- *
- * When `size` is omitted we measure the parent's actual width via
- * onLayout and render a square tile at that pixel size, rather than using
- * CSS `aspectRatio`. Local require()'d images carry their real pixel
- * dimensions, and mixing that with `aspectRatio` alone caused the image to
- * be forced to its native (much taller) pixel height on web — measuring
- * gives a reliable square regardless of the source photo's own size.
- */
 export default function ProductImage({
   image,
   icon,
